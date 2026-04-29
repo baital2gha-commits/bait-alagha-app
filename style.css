@@ -11,7 +11,35 @@ body {
     color: var(--light-gray);
     font-family: 'Cairo', sans-serif;
     margin: 0;
-    padding-bottom: 80px; /* مساحة لزر السلة */
+    padding-bottom: 80px; 
+}
+
+/* شريط العروض المتحرك */
+.promo-bar {
+    background: var(--gold);
+    color: var(--black);
+    padding: 8px 0;
+    overflow: hidden;
+    position: relative;
+    font-weight: bold;
+    font-size: 0.85rem;
+    z-index: 1001;
+}
+
+.promo-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 25s linear infinite;
+}
+
+.promo-track span {
+    margin: 0 30px;
+    white-space: nowrap;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
 }
 
 header {
@@ -47,6 +75,8 @@ header {
     scrollbar-width: none;
 }
 
+.tabs-container::-webkit-scrollbar { display: none; }
+
 .tab-item {
     padding: 8px 25px;
     border-radius: 25px;
@@ -79,11 +109,12 @@ header {
     border: 1px solid #333;
     display: flex;
     flex-direction: column;
+    transition: var(--transition);
 }
 
 .product-image {
     width: 100%;
-    height: 160px;
+    height: 180px;
     object-fit: cover;
 }
 
@@ -103,8 +134,95 @@ header {
     background: var(--gold);
     color: var(--black);
     border: none;
-    padding: 10px;
+    padding: 12px;
     font-weight: bold;
     cursor: pointer;
     width: 100%;
+    transition: var(--transition);
+}
+
+/* زر السلة العائم */
+.cart-fab {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    background: var(--gold);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 2000;
+    cursor: pointer;
+}
+
+.cart-icon-wrapper {
+    position: relative;
+    font-size: 1.5rem;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: #e74c3c;
+    color: white;
+    font-size: 0.75rem;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--black);
+}
+
+/* تنسيق النافذة المنبثقة (Modal) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+    background: var(--dark-gray);
+    margin: 10% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 450px;
+    border-radius: 15px;
+    border: 1px solid var(--gold);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.order-form input, .order-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: white;
+    font-family: 'Cairo';
+    box-sizing: border-box;
+}
+
+.submit-btn {
+    background: #25d366; /* لون الواتساب */
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 15px;
+    cursor: pointer;
 }
