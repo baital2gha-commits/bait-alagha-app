@@ -1,4 +1,5 @@
 import { getProducts } from './api.js';
+import { addToCart, updateCartUI } from './cart.js';
 
 // المتغيرات العامة
 let allProducts = [];
@@ -8,11 +9,14 @@ let currentCategory = 'الكل';
 document.addEventListener('DOMContentLoaded', async () => {
     const productsContainer = document.getElementById('products-grid');
     
+    // تحديث عداد السلة من التخزين المحلي عند الفتح
+    updateCartUI();
+    
     // 1. جلب البيانات من Google Sheets
     allProducts = await getProducts();
     
     if (allProducts.length === 0) {
-        productsContainer.innerHTML = '<div class="loader">لا توجد منتجات حالياً أو هناك خطأ في الاتصال.</div>';
+        productsContainer.innerHTML = '<div class="loader">جاري تحميل المنتجات أو تأكد من الاتصال...</div>';
         return;
     }
 
@@ -66,7 +70,30 @@ function renderProducts(products) {
                 <h3 style="font-size: 1rem; margin: 10px 0;">${p.Name}</h3>
                 <p class="price">${p.Price} ج.م</p>
             </div>
-            <button class="add-btn" onclick="alert('سيتم تفعيل السلة في الخطوة القادمة')">إضافة للسلة</button>
+            <button class="add-btn" data-id="${p.ID}">إضافة للسلة</button>
         </div>
     `).join('');
+
+    // تفعيل أزرار الإضافة للسلة بعد رسمها
+    attachAddEvents();
+}
+
+// ربط أحداث الضغط بأزرار الإضافة
+function attachAddEvents() {
+    document.querySelectorAll('.add-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.getAttribute('data-id');
+            const product = allProducts.find(p => p.ID == productId);
+            if (product) {
+                addToCart(product);
+                // تأثير بصري بسيط عند الإضافة
+                button.innerText = "تمت الإضافة ✓";
+                button.style.background = "#28a745"; // لون أخضر مؤقت
+                setTimeout(() => {
+                    button.innerText = "إضافة للسلة";
+                    button.style.background = "#d4af37"; // العودة للذهبي
+                }, 1000);
+            }
+        });
+    });
 }
