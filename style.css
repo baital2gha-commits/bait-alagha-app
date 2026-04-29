@@ -1,0 +1,110 @@
+:root {
+    --gold: #d4af37;
+    --black: #0d0d0d;
+    --dark-gray: #1a1a1a;
+    --light-gray: #f4f4f4;
+    --transition: all 0.3s ease;
+}
+
+body {
+    background-color: var(--black);
+    color: var(--light-gray);
+    font-family: 'Cairo', sans-serif;
+    margin: 0;
+    padding-bottom: 80px; /* مساحة لزر السلة */
+}
+
+header {
+    padding: 30px 15px;
+    text-align: center;
+    border-bottom: 1px solid var(--gold);
+    background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+}
+
+.brand-name {
+    color: var(--gold);
+    font-size: 2.2rem;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.brand-slogan {
+    color: #888;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* الأقسام (Tabs) */
+.tabs-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 15px;
+    background: var(--dark-gray);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    gap: 10px;
+    scrollbar-width: none;
+}
+
+.tab-item {
+    padding: 8px 25px;
+    border-radius: 25px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tab-item.active {
+    background: var(--gold);
+    color: var(--black);
+    font-weight: bold;
+}
+
+/* شبكة المنتجات */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 15px;
+}
+
+.product-card {
+    background: var(--dark-gray);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.product-details {
+    padding: 12px;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.price {
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.add-btn {
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
