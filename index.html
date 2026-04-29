@@ -9,7 +9,14 @@
 </head>
 <body>
 
-    <div id="promo-slider"></div>
+    <div class="promo-bar">
+        <div class="promo-track">
+            <span>✨ خصومات حصرية بمناسبة الافتتاح ✨</span>
+            <span>🚚 خدمة التوصيل سريعة لجميع المناطق 🚚</span>
+            <span>💎 بيت الآغا.. كل ما تحتاجه لبيت أكثر أناقة 💎</span>
+            <span>✨ خصومات حصرية بمناسبة الافتتاح ✨</span>
+        </div>
+    </div>
 
     <header>
         <div class="logo-container">
@@ -26,7 +33,27 @@
         </div>
     </main>
 
-    <div id="cart-floating-btn"></div>
+    <div id="cart-floating-btn" class="cart-fab">
+        <div class="cart-icon-wrapper">
+            🛒
+            <span id="cart-count" class="cart-badge">0</span>
+        </div>
+    </div>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>سلة المشتريات</h2>
+            <div id="cart-items-list"></div>
+            <hr>
+            <div id="order-form" class="order-form">
+                <input type="text" id="cust-name" placeholder="الاسم بالكامل" required>
+                <input type="tel" id="cust-phone" placeholder="رقم الواتساب" required>
+                <textarea id="cust-location" placeholder="العنوان بالتفصيل أو رابط الموقع" required></textarea>
+                <button id="submit-order-btn" class="submit-btn">إرسال الطلب عبر واتساب</button>
+            </div>
+        </div>
+    </div>
 
     <script type="module" src="app.js"></script>
 </body>
