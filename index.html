@@ -43,14 +43,24 @@
     <div id="cart-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>سلة المشتريات</h2>
-            <div id="cart-items-list"></div>
-            <hr>
+            <h2 style="color:var(--gold); text-align:center;">🛒 سلة بيت الآغا</h2>
+            
+            <div id="cart-items-list">
+                </div>
+            
+            <hr style="border:0.5px solid #444; margin:15px 0;">
+            
             <div id="order-form" class="order-form">
-                <input type="text" id="cust-name" placeholder="الاسم بالكامل" required>
-                <input type="tel" id="cust-phone" placeholder="رقم الواتساب" required>
-                <textarea id="cust-location" placeholder="العنوان بالتفصيل أو رابط الموقع" required></textarea>
-                <button id="submit-order-btn" class="submit-btn">إرسال الطلب عبر واتساب</button>
+                <input type="text" id="cust-name" placeholder="الاسم بالكامل 👤" required>
+                <input type="tel" id="cust-phone" placeholder="رقم الواتساب 📱" required>
+                
+                <button id="get-loc-btn" type="button" style="background:#444; color:white; border:1px solid var(--gold); width:100%; padding:12px; border-radius:8px; margin-bottom:10px; font-family:'Cairo'; cursor:pointer;">
+                    📍 تحديد موقعي الحالي تلقائياً
+                </button>
+                
+                <textarea id="cust-location" placeholder="العنوان بالتفصيل (أو سيظهر الموقع هنا) 🏠" required></textarea>
+                
+                <button id="submit-order-btn" class="submit-btn">تأكيد الطلب عبر واتساب ✅</button>
             </div>
         </div>
     </div>
