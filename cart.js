@@ -32,19 +32,19 @@ function renderCartItems() {
         total += parseFloat(item.Price);
         return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; background:#222; padding:10px; border-radius:8px;">
-                <span>${item.Name}</span>
-                <span style="color:#d4af37;">${item.Price} ج.م</span>
-                <button onclick="window.removeItem(${index})" style="background:none; border:none; color:#ff4444; cursor:pointer;">✕</button>
+                <span style="font-size:0.9rem;">${item.Name}</span>
+                <span style="color:#d4af37; font-weight:bold;">${item.Price} ج.م</span>
+                <button onclick="removeItemFromCart(${index})" style="background:none; border:none; color:#ff4444; font-size:1.2rem; cursor:pointer;">✕</button>
             </div>
         `;
     }).join('');
 
-    html += `<div style="text-align:left; font-weight:bold; margin-top:15px; color:#d4af37;">الإجمالي: ${total} ج.م</div>`;
+    html += `<div style="text-align:left; font-weight:bold; margin-top:15px; color:#d4af37; border-top:1px solid #444; padding-top:10px;">الإجمالي: ${total} ج.م</div>`;
     listContainer.innerHTML = html;
 }
 
-// حذف منتج من السلة
-window.removeItem = (index) => {
+// تعديل بسيط هنا لضمان عمل الحذف داخل الـ Modules
+window.removeItemFromCart = (index) => {
     cart.splice(index, 1);
     saveCart();
     updateCartUI();
@@ -85,6 +85,9 @@ export function sendOrderToWhatsApp() {
     const whatsappNumber = "201112050354"; 
     window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
     
-    // اختياري: تفريغ السلة بعد نجاح الإرسال
-    // cart = []; saveCart(); updateCartUI();
+    // تفريغ السلة بعد الطلب (اختياري - يفضل تفعيله لراحة العميل)
+    cart = []; 
+    saveCart(); 
+    updateCartUI();
+    document.getElementById('cart-modal').style.display = "none";
 }
