@@ -1,5 +1,5 @@
 import { getProducts } from './api.js';
-import { addToCart, updateCartUI, sendOrderToWhatsApp } from './cart.js';
+import { addToCart, updateCartUI, sendOrderToWhatsApp, getLocation } from './cart.js'; // أضفنا getLocation
 
 // المتغيرات العامة
 let allProducts = [];
@@ -26,11 +26,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 3. عرض المنتجات لأول مرة
     renderProducts(allProducts);
 
-    // --- إضافة منطق التحكم في نافذة السلة (Modal) ---
+    // --- منطق التحكم في نافذة السلة (Modal) والعناصر التفاعلية ---
     const cartBtn = document.getElementById('cart-floating-btn');
     const modal = document.getElementById('cart-modal');
     const closeBtn = document.querySelector('.close-modal');
     const submitBtn = document.getElementById('submit-order-btn');
+    const locBtn = document.getElementById('get-loc-btn'); // زر الموقع الجديد
 
     // فتح السلة
     if (cartBtn) {
@@ -52,6 +53,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             modal.style.display = "none";
         }
     };
+
+    // ربط زر الموقع بوظيفة الـ GPS
+    if (locBtn) {
+        locBtn.onclick = () => {
+            getLocation();
+        };
+    }
 
     // ربط زر الإرسال بوظيفة الواتساب
     if (submitBtn) {
