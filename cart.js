@@ -97,7 +97,7 @@ export async function sendOrderToWhatsApp() {
     const manualLocation = document.getElementById('cust-location').value;
 
     if (!name || !phone || !manualLocation) { 
-        alert("فضلاً، أدخل الاسم ورقم الهاتف وتفاصيل العنوان (المحافظة/الحي/الشارع) 🏠"); 
+        alert("فضلاً، أدخل الاسم ورقم الهاتف وتفاصيل العنوان (المحافظة/الحي/الشارع/رقم المنزل/الدور/رقم الشقة) 🏠"); 
         return; 
     }
 
