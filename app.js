@@ -1,5 +1,5 @@
 import { getProducts } from './api.js';
-import { addToCart, updateCartUI } from './cart.js';
+import { addToCart, updateCartUI, sendOrderToWhatsApp } from './cart.js';
 
 // المتغيرات العامة
 let allProducts = [];
@@ -25,11 +25,47 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 3. عرض المنتجات لأول مرة
     renderProducts(allProducts);
+
+    // --- إضافة منطق التحكم في نافذة السلة (Modal) ---
+    const cartBtn = document.getElementById('cart-floating-btn');
+    const modal = document.getElementById('cart-modal');
+    const closeBtn = document.querySelector('.close-modal');
+    const submitBtn = document.getElementById('submit-order-btn');
+
+    // فتح السلة
+    if (cartBtn) {
+        cartBtn.onclick = () => {
+            modal.style.display = "block";
+        };
+    }
+
+    // إغلاق السلة عند الضغط على (X)
+    if (closeBtn) {
+        closeBtn.onclick = () => {
+            modal.style.display = "none";
+        };
+    }
+
+    // إغلاق السلة عند الضغط خارج النافذة
+    window.onclick = (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    // ربط زر الإرسال بوظيفة الواتساب
+    if (submitBtn) {
+        submitBtn.onclick = () => {
+            sendOrderToWhatsApp();
+        };
+    }
 });
 
 // وظيفة عرض الأقسام
 function renderTabs() {
     const tabsContainer = document.getElementById('category-nav');
+    if (!tabsContainer) return;
+    
     const categories = ['الكل', ...new Set(allProducts.map(p => p.Category))];
 
     tabsContainer.innerHTML = categories.map(cat => `
@@ -39,7 +75,6 @@ function renderTabs() {
         </button>
     `).join('');
 
-    // إضافة مستمع للأحداث عند الضغط على قسم
     document.querySelectorAll('.tab-item').forEach(button => {
         button.addEventListener('click', () => {
             document.querySelectorAll('.tab-item').forEach(b => b.classList.remove('active'));
@@ -62,6 +97,7 @@ function filterByCategory(category) {
 // وظيفة عرض المنتجات في الشبكة
 function renderProducts(products) {
     const productsContainer = document.getElementById('products-grid');
+    if (!productsContainer) return;
     
     productsContainer.innerHTML = products.map(p => `
         <div class="product-card">
@@ -74,7 +110,6 @@ function renderProducts(products) {
         </div>
     `).join('');
 
-    // تفعيل أزرار الإضافة للسلة بعد رسمها
     attachAddEvents();
 }
 
@@ -86,12 +121,11 @@ function attachAddEvents() {
             const product = allProducts.find(p => p.ID == productId);
             if (product) {
                 addToCart(product);
-                // تأثير بصري بسيط عند الإضافة
                 button.innerText = "تمت الإضافة ✓";
-                button.style.background = "#28a745"; // لون أخضر مؤقت
+                button.style.background = "#28a745";
                 setTimeout(() => {
                     button.innerText = "إضافة للسلة";
-                    button.style.background = "#d4af37"; // العودة للذهبي
+                    button.style.background = "#d4af37";
                 }, 1000);
             }
         });
