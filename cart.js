@@ -92,13 +92,22 @@ export function sendOrderToWhatsApp() {
     const phone = document.getElementById('cust-phone').value;
     const manualLocation = document.getElementById('cust-location').value;
 
-    if (!name || !phone) { alert("يرجى كتابة الاسم ورقم الهاتف"); return; }
+    if (!name || !phone || !manualLocation) { 
+        alert("يرجى التأكد من كتابة الاسم ورقم الهاتف والعنوان بالتفصيل 🏠"); 
+        return; 
+    }
 
     let message = `*📦 طلب جديد - بيت الآغا*%0A`;
     message += `━━━━━━━━━━━━━━━%0A`;
     message += `*👤 العميل:* ${name}%0A`;
     message += `*📱 هاتف:* ${phone}%0A`;
-    message += `*📍 الموقع:* ${userLocation ? 'مرفق بالأسفل' : manualLocation}%0A`;
+    // هنا قمنا بدمج العنوان المكتوب مع رابط الموقع
+    message += `*🏠 العنوان:* ${manualLocation}%0A`;
+    
+    if (userLocation) {
+        message += `*📍 الموقع الجغرافي:* مرفق بالأسفل 👇%0A`;
+    }
+    
     message += `━━━━━━━━━━━━━━━%0A`;
     message += `*🛍️ المنتجات المطلوبة:*%0A`;
     
@@ -111,7 +120,18 @@ export function sendOrderToWhatsApp() {
 
     message += `━━━━━━━━━━━━━━━%0A`;
     message += `*💰 الإجمالي النهائي:* ${total} ج.م%0A`;
-    if(userLocation) message += `%0A*📍 موقع العميل على الخريطة:*%0A${userLocation}`;
 
-    window.open(`https://wa.me/201112050354?text=${message}`, '_blank');
+    // إذا كان العميل قد سجل موقعه عبر GPS نرسل الرابط في النهاية
+    if (userLocation) {
+        message += `%0A*📍 موقع العميل على الخريطة:*%0A${userLocation}`;
+    }
+
+    const whatsappNumber = "201112050354"; 
+    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+    
+    // تفريغ السلة وإغلاق النافذة
+    cart = []; 
+    saveCart(); 
+    updateCartUI();
+    document.getElementById('cart-modal').style.display = "none";
 }
