@@ -1,4 +1,4 @@
-// cart.js - النسخة الاحترافية (واتساب + سجل الطلبات الرقمي)
+// cart.js - النسخة الاحترافية المحدثة (واتساب + سجل الطلبات الرقمي)
 let cart = JSON.parse(localStorage.getItem('bait_alagha_cart')) || [];
 let userLocation = "";
 
@@ -6,8 +6,7 @@ let userLocation = "";
 export function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-            // الرابط الذي يعمل بشكل صحيح كما طلبت
-            userLocation = `http://maps.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
+            userLocation = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
             alert("📍 تم تحديد موقعك بنجاح وسيتم إرفاقه مع الطلب");
             const locBtn = document.getElementById('get-loc-btn');
             if(locBtn) { 
@@ -15,7 +14,7 @@ export function getLocation() {
                 locBtn.style.background = "#28a745"; 
             }
         }, () => {
-            alert("تعذر جلب الموقع، يرجى كتابة العنوان يدوياً بالتفصيل");
+            alert("تعذر جلب الموقع، يرجى كتابة العنوان يدوياً");
         });
     }
 }
@@ -97,23 +96,21 @@ export async function sendOrderToWhatsApp() {
     const manualLocation = document.getElementById('cust-location').value;
 
     if (!name || !phone || !manualLocation) { 
-        alert("فضلاً، أدخل الاسم ورقم الهاتف وتفاصيل العنوان (المحافظة/الحي/الشارع/رقم المنزل/الدور/رقم الشقة) 🏠"); 
+        alert("يرجى إدخال الاسم، رقم الهاتف، والعنوان بالتفصيل 🏠"); 
         return; 
     }
 
     const totalPrice = cart.reduce((sum, item) => sum + (parseFloat(item.Price) * item.quantity), 0);
     const orderSummary = cart.map(item => `${item.Name} (${item.quantity})`).join(' - ');
 
-    // --- 1. إرسال البيانات لجوجل شيت (تلقائي) ---
+    // 1. تسجيل في جوجل شيت
     const submitBtn = document.getElementById('submit-order-btn');
     const originalText = submitBtn.innerText;
-    submitBtn.innerText = "جاري حفظ الطلب... ⏳";
+    submitBtn.innerText = "جاري الحفظ... ⏳";
     submitBtn.disabled = true;
 
     try {
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwn15TPDsuwz6Jouf5GRwyomtOd9hMcF6oC9hCGTz_i0pJL6irfP_eDsTtMDzE4cKsZbA/exec';
-        
-        // تجهيز البيانات كـ FormData لضمان وصولها للشيت
         const formData = new FormData();
         formData.append('name', name);
         formData.append('phone', phone);
@@ -122,47 +119,37 @@ export async function sendOrderToWhatsApp() {
         formData.append('order', orderSummary);
         formData.append('total', totalPrice);
 
-        await fetch(scriptURL, { 
-            method: 'POST', 
-            body: formData, 
-            mode: 'no-cors' 
-        });
-        console.log("Order saved to Sheet");
-    } catch (e) {
-        console.error("Sheet Error:", e);
-    }
+        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
+    } catch (e) { console.error("Error:", e); }
 
-    // --- 2. تجهيز رسالة الواتساب الاحترافية ---
+    // 2. رسالة الواتساب المنظمة
     let message = `*📦 طلب جديد من متجر بيت الآغا*%0A`;
     message += `━━━━━━━━━━━━━━━%0A`;
     message += `*👤 العميل:* ${name}%0A`;
     message += `*📱 هاتف:* ${phone}%0A`;
-    message += `*🏠 تفاصيل العنوان:*%0A${manualLocation}%0A`;
+    message += `*🏠 العنوان:* ${manualLocation}%0A`;
     
     if (userLocation) {
-        message += `*📍 موقع الـ GPS:* مرفق بالأسفل 👇%0A`;
+        message += `*📍 رابط الموقع:* مرفق 👇%0A`;
     }
     
     message += `━━━━━━━━━━━━━━━%0A`;
-    message += `*🛍️ السلة:*%0A`;
+    message += `*🛍️ المنتجات:*%0A`;
     
     cart.forEach((item) => {
         const lineTotal = parseFloat(item.Price) * item.quantity;
-        message += `🔹 *${item.Name}*%0A      الكمية: ${item.quantity} | الكود: ${item.ID}%0A      السعر: ${lineTotal} ج.م%0A`;
+        message += `🔹 ${item.Name} (كود: ${item.ID})%0A   الكمية: ${item.quantity} | السعر: ${lineTotal} ج.م%0A`;
     });
 
     message += `━━━━━━━━━━━━━━━%0A`;
-    message += `*💰 الإجمالي النهائي:* ${totalPrice} ج.م%0A`;
+    message += `*💰 الإجمالي:* ${totalPrice} ج.م%0A`;
 
     if (userLocation) {
-        message += `%0A*📍 لوكيشن العميل على الخريطة:*%0A${userLocation}`;
+        message += `%0A*📍 لوكيشن العميل:*%0A${userLocation}`;
     }
 
-    // فتح الواتساب
-    const whatsappNumber = "201112050354"; 
-    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+    window.open(`https://wa.me/201112050354?text=${message}`, '_blank');
     
-    // إعادة ضبط الواجهة وتفريغ السلة
     submitBtn.innerText = originalText;
     submitBtn.disabled = false;
     cart = []; 
