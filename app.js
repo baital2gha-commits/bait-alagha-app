@@ -1,5 +1,5 @@
 import { getProducts } from './api.js';
-import { addToCart, updateCartUI, sendOrderToWhatsApp, getLocation } from './cart.js'; // أضفنا getLocation
+import { addToCart, updateCartUI, sendOrderToWhatsApp, getLocation } from './cart.js'; 
 
 // المتغيرات العامة
 let allProducts = [];
@@ -31,7 +31,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modal = document.getElementById('cart-modal');
     const closeBtn = document.querySelector('.close-modal');
     const submitBtn = document.getElementById('submit-order-btn');
-    const locBtn = document.getElementById('get-loc-btn'); // زر الموقع الجديد
+    const locBtn = document.getElementById('get-loc-btn');
+    const locationInput = document.getElementById('cust-location'); // تحديد خانة العنوان
+
+    // وظيفة إظهار تفاصيل العنوان تلقائياً عند الضغط
+    if (locationInput) {
+        locationInput.addEventListener('focus', function() {
+            if (this.value === "") {
+                this.value = "المحافظة: \nالحي: \nالشارع: \nرقم المنزل: \nالدور/الشقة: \nعلامة مميزة: ";
+                // وضع المؤشر في البداية بعد كلمة المحافظة
+                this.setSelectionRange(9, 9);
+            }
+        });
+    }
 
     // فتح السلة
     if (cartBtn) {
