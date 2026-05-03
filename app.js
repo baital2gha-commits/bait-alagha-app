@@ -32,19 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const closeBtn = document.querySelector('.close-modal');
     const submitBtn = document.getElementById('submit-order-btn');
     const locBtn = document.getElementById('get-loc-btn');
-    const locationInput = document.getElementById('cust-location'); // تحديد خانة العنوان
-
-    // وظيفة إظهار تفاصيل العنوان تلقائياً عند الضغط
-    if (locationInput) {
-        locationInput.addEventListener('focus', function() {
-            if (this.value === "") {
-                this.value = "المحافظة: \nالحي: \nالشارع: \nرقم المنزل: \nالدور/الشقة: \nعلامة مميزة: ";
-                // وضع المؤشر في البداية بعد كلمة المحافظة
-                this.setSelectionRange(9, 9);
-            }
-        });
-    }
-
+    
     // فتح السلة
     if (cartBtn) {
         cartBtn.onclick = () => {
