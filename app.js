@@ -9,6 +9,15 @@ let currentCategory = 'الكل';
 document.addEventListener('DOMContentLoaded', async () => {
     const productsContainer = document.getElementById('products-grid');
     
+    // استرجاع بيانات العميل المخزنة تلقائياً (الاسم، الهاتف، العنوان)
+    const savedName = localStorage.getItem('cust_name');
+    const savedPhone = localStorage.getItem('cust_phone');
+    const savedAddress = localStorage.getItem('cust_address');
+
+    if (savedName) document.getElementById('cust-name').value = savedName;
+    if (savedPhone) document.getElementById('cust-phone').value = savedPhone;
+    if (savedAddress) document.getElementById('cust-location').value = savedAddress;
+
     // تحديث عداد السلة من التخزين المحلي عند الفتح
     updateCartUI();
     
