@@ -121,7 +121,7 @@ export async function sendOrderToWhatsApp() {
     // استبدل الجزء الخاص بالـ fetch داخل دالة sendOrderToWhatsApp بهذا الكود:
 
     try {
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxw0KgPjg9E5WH2SbPbr6_xfBj4ivAR1Qh-Ylzk0n9LNbIiHi-6V_aeFGPPIDURmS_tqA/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxs_0TERa9UWyIyBclBBz-sssriSu2KfCnCocw9wi-OpGV82Qaf4rdWvM_QRFEKj4h7CQ/exec';
         
         const formData = new FormData();
         // التعديل هنا ليطابق أسماء الأعمدة في الصورة بالظبط
