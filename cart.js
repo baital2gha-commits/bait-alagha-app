@@ -100,6 +100,16 @@ export async function sendOrderToWhatsApp() {
         return; 
     }
 
+    // --- ١. حفظ بيانات العميل لاسترجاعها تلقائياً في المرة القادمة ---
+    localStorage.setItem('cust_name', name);
+    localStorage.setItem('cust_phone', phone);
+    localStorage.setItem('cust_address', manualLocation);
+
+    // --- ٢. منطق الترقيم التسلسلي للفاتورة ---
+    let orderNumber = localStorage.getItem('last_order_number') || 1000; // يبدأ من 1000 إذا كانت أول مرة
+    orderNumber = parseInt(orderNumber) + 1;
+    localStorage.setItem('last_order_number', orderNumber);
+
     const totalPrice = cart.reduce((sum, item) => sum + (parseFloat(item.Price) * item.quantity), 0);
     const orderSummary = cart.map(item => `${item.Name} (${item.quantity})`).join(' - ');
 
@@ -112,6 +122,8 @@ export async function sendOrderToWhatsApp() {
     try {
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwn15TPDsuwz6Jouf5GRwyomtOd9hMcF6oC9hCGTz_i0pJL6irfP_eDsTtMDzE4cKsZbA/exec';
         const formData = new FormData();
+        // إرسال رقم الفاتورة أيضاً للشيت
+        formData.append('orderId', `#${orderNumber}`);
         formData.append('name', name);
         formData.append('phone', phone);
         formData.append('address', manualLocation);
@@ -122,8 +134,8 @@ export async function sendOrderToWhatsApp() {
         await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
     } catch (e) { console.error("Error:", e); }
 
-    // 2. رسالة الواتساب المنظمة
-    let message = `*📦 طلب جديد من متجر بيت الآغا*%0A`;
+    // 2. رسالة الواتساب المنظمة مع رقم الطلب
+    let message = `*📦 طلب جديد رقم: #${orderNumber}*%0A`;
     message += `━━━━━━━━━━━━━━━%0A`;
     message += `*👤 العميل:* ${name}%0A`;
     message += `*📱 هاتف:* ${phone}%0A`;
