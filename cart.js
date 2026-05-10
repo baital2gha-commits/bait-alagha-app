@@ -100,20 +100,19 @@ export async function sendOrderToWhatsApp() {
         return; 
     }
 
-    // --- ١. حفظ بيانات العميل لاسترجاعها تلقائياً في المرة القادمة ---
+    // حفظ البيانات للمرة القادمة
     localStorage.setItem('cust_name', name);
     localStorage.setItem('cust_phone', phone);
     localStorage.setItem('cust_address', manualLocation);
 
-    // --- ٢. منطق الترقيم التسلسلي للفاتورة ---
-    let orderNumber = localStorage.getItem('last_order_number') || 1000; // يبدأ من 1000 إذا كانت أول مرة
+    // ترقيم الفاتورة
+    let orderNumber = localStorage.getItem('last_order_number') || 1000;
     orderNumber = parseInt(orderNumber) + 1;
     localStorage.setItem('last_order_number', orderNumber);
 
     const totalPrice = cart.reduce((sum, item) => sum + (parseFloat(item.Price) * item.quantity), 0);
     const orderSummary = cart.map(item => `${item.Name} (${item.quantity})`).join(' - ');
 
-    // 1. تسجيل في جوجل شيت
     const submitBtn = document.getElementById('submit-order-btn');
     const originalText = submitBtn.innerText;
     submitBtn.innerText = "جاري الحفظ... ⏳";
@@ -122,7 +121,6 @@ export async function sendOrderToWhatsApp() {
     try {
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwn15TPDsuwz6Jouf5GRwyomtOd9hMcF6oC9hCGTz_i0pJL6irfP_eDsTtMDzE4cKsZbA/exec';
         const formData = new FormData();
-        // إرسال رقم الفاتورة أيضاً للشيت
         formData.append('orderId', `#${orderNumber}`);
         formData.append('name', name);
         formData.append('phone', phone);
@@ -134,33 +132,37 @@ export async function sendOrderToWhatsApp() {
         await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
     } catch (e) { console.error("Error:", e); }
 
-    // 2. رسالة الواتساب المنظمة مع رقم الطلب
-    let message = `*📦 طلب جديد رقم: #${orderNumber}*%0A`;
-    message += `━━━━━━━━━━━━━━━%0A`;
-    message += `*👤 العميل:* ${name}%0A`;
-    message += `*📱 هاتف:* ${phone}%0A`;
-    message += `*🏠 العنوان:* ${manualLocation}%0A`;
+    // --- تعديل رسالة الواتساب لضمان وصولها كاملة ---
+    let message = `*📦 طلب جديد رقم: #${orderNumber}*\n`;
+    message += `━━━━━━━━━━━━━━━\n`;
+    message += `*👤 العميل:* ${name}\n`;
+    message += `*📱 هاتف:* ${phone}\n`;
+    message += `*🏠 العنوان:* ${manualLocation}\n`;
     
     if (userLocation) {
-        message += `*📍 رابط الموقع:* مرفق 👇%0A`;
+        message += `*📍 رابط الموقع:* مرفق 👇\n`;
     }
     
-    message += `━━━━━━━━━━━━━━━%0A`;
-    message += `*🛍️ المنتجات:*%0A`;
+    message += `━━━━━━━━━━━━━━━\n`;
+    message += `*🛍️ المنتجات:*\n`;
     
     cart.forEach((item) => {
         const lineTotal = parseFloat(item.Price) * item.quantity;
-        message += `🔹 ${item.Name} (كود: ${item.ID})%0A   الكمية: ${item.quantity} | السعر: ${lineTotal} ج.م%0A`;
+        message += `🔹 ${item.Name} (كود: ${item.ID})\n   الكمية: ${item.quantity} | السعر: ${lineTotal} ج.م\n`;
     });
 
-    message += `━━━━━━━━━━━━━━━%0A`;
-    message += `*💰 الإجمالي:* ${totalPrice} ج.م%0A`;
+    message += `━━━━━━━━━━━━━━━\n`;
+    message += `*💰 الإجمالي:* ${totalPrice} ج.م\n`;
 
     if (userLocation) {
-        message += `%0A*📍 لوكيشن العميل:*%0A${userLocation}`;
+        message += `\n*📍 لوكيشن العميل:*\n${userLocation}`;
     }
 
-    window.open(`https://wa.me/201112050354?text=${message}`, '_blank');
+    // تحويل الرسالة لشكل يفهمه المتصفح (URL Encoding)
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappNumber = "201112050354"; 
+    
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
     
     submitBtn.innerText = originalText;
     submitBtn.disabled = false;
