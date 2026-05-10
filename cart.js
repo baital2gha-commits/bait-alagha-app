@@ -118,19 +118,30 @@ export async function sendOrderToWhatsApp() {
     submitBtn.innerText = "جاري الحفظ... ⏳";
     submitBtn.disabled = true;
 
+    // استبدل الجزء الخاص بالـ fetch داخل دالة sendOrderToWhatsApp بهذا الكود:
+
     try {
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwn15TPDsuwz6Jouf5GRwyomtOd9hMcF6oC9hCGTz_i0pJL6irfP_eDsTtMDzE4cKsZbA/exec';
+        
         const formData = new FormData();
-        formData.append('orderId', `#${orderNumber}`);
-        formData.append('name', name);
-        formData.append('phone', phone);
-        formData.append('address', manualLocation);
-        formData.append('locationUrl', userLocation || "لم يحدد");
-        formData.append('order', orderSummary);
-        formData.append('total', totalPrice);
+        // التعديل هنا ليطابق أسماء الأعمدة في الصورة بالظبط
+        formData.append('OrderID', `#${orderNumber}`); 
+        formData.append('CustomerName', name);
+        formData.append('Phone', phone);
+        formData.append('Location', manualLocation);
+        formData.append('Items', orderSummary);
+        formData.append('TotalAmount', totalPrice);
+        // ملاحظة: Timestamp عادة يضاف تلقائياً من خلال السكريبت في جوجل
 
-        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
-    } catch (e) { console.error("Error:", e); }
+        await fetch(scriptURL, { 
+            method: 'POST', 
+            body: formData, 
+            mode: 'no-cors' 
+        });
+        console.log("تم تسجيل الطلب في الشيت بنجاح");
+    } catch (e) { 
+        console.error("خطأ في التسجيل:", e); 
+    }
 
     // --- تعديل رسالة الواتساب لضمان وصولها كاملة ---
     let message = `*📦 طلب جديد رقم: #${orderNumber}*\n`;
