@@ -53,13 +53,13 @@ body {
 }
 
 .cover-photo {
-    width: 100%;
+    width: 90%;
     height: 200px; /* يمكنك تعديله لزيادة أو تقليل طول الغلاف */
     overflow: hidden;
 }
 
 .cover-photo img {
-    width: 100%;
+    width: 90%;
     height: 100%;
     object-fit: cover; /* لضمان عدم تمطط الصورة */
 }
