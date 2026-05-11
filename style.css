@@ -42,24 +42,68 @@ body {
     100% { transform: translateX(50%); }
 }
 
-header {
-    padding: 30px 15px;
+/* --- تنسيق الهيدر وصور البراند --- */
+.app-header {
+    width: 100%;
+    background-color: #121212;
     text-align: center;
-    border-bottom: 1px solid var(--gold);
-    background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+    position: relative;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--gold);
 }
 
-.brand-name {
+.cover-photo {
+    width: 100%;
+    height: 200px; /* يمكنك تعديله لزيادة أو تقليل طول الغلاف */
+    overflow: hidden;
+}
+
+.cover-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* لضمان عدم تمطط الصورة */
+}
+
+.logo-container {
+    width: 110px;
+    height: 110px;
+    background: #000;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    margin: -55px auto 10px; /* لرفع اللوجو نصف مسافته فوق الغلاف */
+    position: relative;
+    z-index: 5;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+}
+
+.app-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.store-info .brand-name {
+    font-size: 1.8rem;
     color: var(--gold);
-    font-size: 2.2rem;
-    margin: 0;
-    letter-spacing: 2px;
+    margin: 5px 0;
+    font-weight: 700;
 }
 
-.brand-slogan {
-    color: #888;
+.store-info .brand-slogan {
     font-size: 0.9rem;
-    margin-top: 5px;
+    color: #bbb;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* تعديل بسيط لضمان المسافات تحت الهيدر */
+.tabs-container {
+    margin-top: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #121212;
 }
 
 /* الأقسام (Tabs) */
