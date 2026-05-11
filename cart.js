@@ -132,20 +132,16 @@ export async function sendOrderToWhatsApp() {
     submitBtn.innerText = "جاري الحفظ... ⏳";
     submitBtn.disabled = true;
 
-    // استبدل الجزء الخاص بالـ fetch داخل دالة sendOrderToWhatsApp بهذا الكود:
-
     try {
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxs_0TERa9UWyIyBclBBz-sssriSu2KfCnCocw9wi-OpGV82Qaf4rdWvM_QRFEKj4h7CQ/exec';
         
         const formData = new FormData();
-        // التعديل هنا ليطابق أسماء الأعمدة في الصورة بالظبط
         formData.append('OrderID', `#${orderNumber}`); 
         formData.append('CustomerName', name);
         formData.append('Phone', phone);
         formData.append('Location', manualLocation);
         formData.append('Items', orderSummary);
         formData.append('TotalAmount', totalPrice);
-        // ملاحظة: Timestamp عادة يضاف تلقائياً من خلال السكريبت في جوجل
 
         await fetch(scriptURL, { 
             method: 'POST', 
@@ -157,38 +153,44 @@ export async function sendOrderToWhatsApp() {
         console.error("خطأ في التسجيل:", e); 
     }
 
-    // --- تعديل رسالة الواتساب لضمان وصولها كاملة ---
-    let message = `*📦 طلب جديد رقم: #${orderNumber}*\n`;
+    // --- بناء رسالة الواتساب الاحترافية المنسقة ---
+    let message = `*🧾 فاتورة طلب جديدة - بيت الآغا*\n`;
+    message += `*رقم الطلب: #${orderNumber}*\n`;
     message += `━━━━━━━━━━━━━━━\n`;
     message += `*👤 العميل:* ${name}\n`;
-    message += `*📱 هاتف:* ${phone}\n`;
+    message += `*📱 الهاتف:* ${phone}\n`;
     message += `*🏠 العنوان:* ${manualLocation}\n`;
     
-    if (userLocation) {
-        message += `*📍 رابط الموقع:* مرفق 👇\n`;
+    // إذا كان هناك إحداثيات GPS من دالة getLocation
+    if (typeof userLocation !== 'undefined' && userLocation) {
+        message += `*📍 رابط الموقع:* مرفق بالأسفل 👇\n`;
     }
     
     message += `━━━━━━━━━━━━━━━\n`;
-    message += `*🛍️ المنتجات:*\n`;
+    message += `*📦 المنتجات:*\n\n`;
     
-    cart.forEach((item) => {
+    cart.forEach((item, index) => {
         const lineTotal = parseFloat(item.Price) * item.quantity;
-        message += `🔹 ${item.Name} (كود: ${item.ID})\n   الكمية: ${item.quantity} | السعر: ${lineTotal} ج.م\n`;
+        message += `${index + 1}. *${item.Name}*\n`;
+        message += `   الكمية: ${item.quantity} | السعر: ${lineTotal} ج.م\n\n`;
     });
 
     message += `━━━━━━━━━━━━━━━\n`;
-    message += `*💰 الإجمالي:* ${totalPrice} ج.م\n`;
+    message += `*💰 الإجمالي النهائي: ${totalPrice} ج.م*\n`;
+    message += `━━━━━━━━━━━━━━━\n`;
 
-    if (userLocation) {
-        message += `\n*📍 لوكيشن العميل:*\n${userLocation}`;
+    if (typeof userLocation !== 'undefined' && userLocation) {
+        message += `\n*📍 لوكيشن العميل (GPS):*\n${userLocation}\n`;
     }
 
-    // تحويل الرسالة لشكل يفهمه المتصفح (URL Encoding)
+    message += `✨ شكراً لطلبكم من بيت الآغا ✨`;
+
     const encodedMessage = encodeURIComponent(message);
     const whatsappNumber = "201112050354"; 
     
     window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
     
+    // إعادة تعيين واجهة المستخدم
     submitBtn.innerText = originalText;
     submitBtn.disabled = false;
     cart = []; 
