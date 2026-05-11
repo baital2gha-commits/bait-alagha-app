@@ -54,14 +54,17 @@ body {
 
 .cover-photo {
     width: 100%;
-    height: 200px; /* يمكنك تعديله لزيادة أو تقليل طول الغلاف */
+    height: auto; /* خليه تلقائي عشان ياخد ارتفاع الصورة الحقيقي */
+    max-height: 350px; /* حد أقصى عشان ما ياخدش الشاشة كلها */
     overflow: hidden;
+    background-color: #1a1a1a;
 }
 
 .cover-photo img {
     width: 100%;
-    height: 100%;
-    object-fit: cover; /* لضمان عدم تمطط الصورة */
+    height: auto;
+    display: block;
+    object-fit: contain; /* التغيير الجوهري هنا: هيعرض الصورة كاملة بدون قص */
 }
 
 .logo-container {
