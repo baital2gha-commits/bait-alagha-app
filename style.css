@@ -303,3 +303,78 @@ body {
     margin-top: 15px;
     cursor: pointer;
 }
+
+/* 1. تثبيت شريط الأقسام في الأعلى */
+.tabs-container {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #121212; /* نفس لون الخلفية عشان ما يغطيش المنتجات */
+    padding: 10px 5px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    overflow-x: auto; /* للسماح بالتمرير الأفقي للأقسام */
+    gap: 10px;
+    scrollbar-width: none; /* إخفاء شريط التمرير في فايرفوكس */
+}
+
+.tabs-container::-webkit-scrollbar {
+    display: none; /* إخفاء شريط التمرير في كروم وسفاري */
+}
+
+/* 2. أنيميشن ظهور المنتجات */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.product-card {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* 3. تطوير زر السلة العائم (تأثير النبض) */
+.cart-fab {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: var(--gold);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    z-index: 2000;
+    cursor: pointer;
+}
+
+/* أنيميشن النبض للزر لو السلة فيها منتجات */
+.cart-fab.has-items {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+
+/* 4. تحسين شكل أزرار الأقسام (Tabs) */
+.tab-item {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 1px solid #444;
+    background: transparent;
+    color: #fff;
+    white-space: nowrap;
+    font-family: 'Cairo', sans-serif;
+    transition: 0.3s;
+}
+
+.tab-item.active {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+    font-weight: bold;
+}
