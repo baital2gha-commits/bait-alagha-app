@@ -141,51 +141,81 @@ body {
     font-weight: bold;
 }
 
-/* شبكة المنتجات */
+/* 1. نظام الشبكة الاحترافي - عمودين للموبايل */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
-    padding: 15px;
+    grid-template-columns: repeat(2, 1fr); /* عمودين متساويين */
+    gap: 12px; /* مسافة بين المنتجات */
+    padding: 12px;
+    background-color: #000; /* خلفية سوداء تبرز المنتجات */
 }
 
+/* 2. تطوير بطاقة المنتج (Card) */
 .product-card {
-    background: var(--dark-gray);
+    background: #1a1a1a; /* رمادي غامق جداً */
+    border: 1px solid #333;
     border-radius: 12px;
     overflow: hidden;
-    border: 1px solid #333;
     display: flex;
     flex-direction: column;
-    transition: var(--transition);
+    transition: transform 0.2s ease;
+    position: relative;
 }
 
-.product-image {
+/* 3. تنسيق صورة المنتج */
+.product-card img {
     width: 100%;
-    height: 180px;
+    aspect-ratio: 1 / 1; /* يخلي الصورة مربعة ومنظمة */
     object-fit: cover;
+    border-bottom: 1px solid #333;
 }
 
-.product-details {
-    padding: 12px;
-    text-align: center;
+/* 4. تفاصيل المنتج (الاسم والسعر) */
+.product-info {
+    padding: 10px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     flex-grow: 1;
 }
 
-.price {
-    color: var(--gold);
-    font-weight: bold;
-    font-size: 1.1rem;
+.product-name {
+    color: #eee;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* يخلي الاسم سطرين بس لو طويل */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.add-btn {
+.product-price {
+    color: var(--gold);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: auto;
+}
+
+/* 5. زر الإضافة السريع (🛒) */
+.add-to-cart-btn {
     background: var(--gold);
-    color: var(--black);
+    color: #000;
     border: none;
-    padding: 12px;
-    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 10px;
+    left: 10px; /* الزر هيكون على الشمال والبيانات على اليمين */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
     cursor: pointer;
-    width: 100%;
-    transition: var(--transition);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
 /* زر السلة العائم */
