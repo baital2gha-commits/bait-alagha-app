@@ -18,7 +18,6 @@ export function getLocation() {
         });
     }
 }
-
 export function addToCart(product) {
     const existingProduct = cart.find(item => item.ID === product.ID);
     if (existingProduct) {
@@ -36,12 +35,27 @@ function saveCart() {
 
 export function updateCartUI() {
     const cartCount = document.getElementById('cart-count');
+    const cartBtn = document.getElementById('cart-floating-btn'); // عنصر زر السلة العائم
+    
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    // تحديث عداد السلة
     if (cartCount) {
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
         cartCount.innerText = totalItems;
     }
+
+    // إضافة أو إزالة تأثير "النبض" بناءً على وجود منتجات
+    if (cartBtn) {
+        if (totalItems > 0) {
+            cartBtn.classList.add('has-items');
+        } else {
+            cartBtn.classList.remove('has-items');
+        }
+    }
+
     renderCartItems();
 }
+
 
 function renderCartItems() {
     const listContainer = document.getElementById('cart-items-list');
