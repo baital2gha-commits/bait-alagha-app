@@ -1,0 +1,21 @@
+{
+  "name": "بيت الآغا - Bait Al Agha",
+  "short_name": "بيت الآغا",
+  "description": "الأدوات المنزلية العصرية ✨",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#d4af37",
+  "icons": [
+    {
+      "src": "Images/Logo.avif",
+      "sizes": "192x192",
+      "type": "image/avif"
+    },
+    {
+      "src": "Images/Logo.avif",
+      "sizes": "512x512",
+      "type": "image/avif"
+    }
+  ]
+}
