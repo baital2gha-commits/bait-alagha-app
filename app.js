@@ -144,3 +144,12 @@ function attachAddEvents() {
         });
     });
 }
+
+// --- تفعيل الـ Service Worker لتحويل الموقع إلى تطبيق (PWA) ---
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('✅ Service Worker تم تسجيله بنجاح'))
+            .catch(err => console.log('❌ فشل تسجيل Service Worker:', err));
+    });
+}
