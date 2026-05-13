@@ -428,20 +428,25 @@ body {
     display: block;
 }
 
-/* --- تنسيق السلايدر (About Slider) --- */
+/* --- تنسيق السلايدر المطور (About Slider) --- */
 .about-slider {
     width: 100%;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-}
-
-.about-slider::-webkit-scrollbar {
-    display: none;
+    overflow: hidden; /* تم التغيير لمنع التمرير اليدوي العشوائي أثناء الحركة التلقائية */
+    position: relative;
+    background: #000;
 }
 
 .slider-track {
     display: flex;
+    /* التمرير السلس سيعتمد الآن على دالة scrollTo في الجافا سكريبت أو التمرير اليدوي */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* لإخفاء الشريط في فيرفوكس */
+}
+
+.slider-track::-webkit-scrollbar {
+    display: none; /* لإخفاء الشريط في كروم وسفاري */
 }
 
 .slider-track img {
@@ -449,7 +454,7 @@ body {
     flex-shrink: 0;
     scroll-snap-align: start;
     object-fit: contain;
-    background: #000;
+    display: block;
 }
 
 /* --- تنسيق أزرار التواصل (Contact) --- */
