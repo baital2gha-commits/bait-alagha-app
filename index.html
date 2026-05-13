@@ -14,6 +14,8 @@
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- مكتبة الأيقونات للتواصل الاجتماعي -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
@@ -39,12 +41,64 @@
         </div>
     </header>
 
-    <nav id="category-nav" class="tabs-container"></nav>
+    <!-- شريط التبويبات الرئيسي الجديد -->
+    <nav class="main-tabs">
+        <button class="main-tab-btn active" data-target="store-section">المتجر 🛒</button>
+        <button class="main-tab-btn" data-target="about-section">بيت الآغا ✨</button>
+        <button class="main-tab-btn" data-target="contact-section">تواصل معنا 📞</button>
+    </nav>
 
-    <main>
-        <div id="products-grid" class="products-grid">
-            <div class="loader">جاري تحميل تشكيلة بيت الآغا...</div>
-        </div>
+    <main id="main-content">
+        <!-- قسم المتجر -->
+        <section id="store-section" class="tab-panel active">
+            <nav id="category-nav" class="tabs-container"></nav>
+            <div id="products-grid" class="products-grid">
+                <div class="loader">جاري تحميل تشكيلة بيت الآغا...</div>
+            </div>
+        </section>
+
+        <!-- قسم عن بيت الآغا (Slider) -->
+        <section id="about-section" class="tab-panel">
+            <div class="about-slider">
+                <div class="slider-track">
+                    <img src="Images/slide_01_cover.avif" alt="1">
+                    <img src="Images/slide_02_banner.avif" alt="2">
+                    <img src="Images/slide_03_about.avif" alt="3">
+                    <img src="Images/slide_04_products.avif" alt="4">
+                    <img src="Images/panel_05.avif" alt="5">
+                    <img src="Images/panel_06.avif" alt="6">
+                    <img src="Images/panel_07.avif" alt="7">
+                    <img src="Images/slide_08_why.avif" alt="8">
+                    <img src="Images/panel_9.avif" alt="9">
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم تواصل معنا -->
+        <section id="contact-section" class="tab-panel">
+            <div class="contact-container">
+                <a href="https://wa.me/201112050354" class="contact-card-link wa">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>واتساب مباشر</span>
+                </a>
+                <a href="https://www.facebook.com/share/1LAhXseFbq/" class="contact-card-link fb">
+                    <i class="fab fa-facebook-f"></i>
+                    <span>فيسبوك</span>
+                </a>
+                <a href="https://www.instagram.com/baitalagha?igsh=N3licGNtYTJ4cGh5" class="contact-card-link ig">
+                    <i class="fab fa-instagram"></i>
+                    <span>إنستجرام</span>
+                </a>
+                <a href="mailto:baital2gha@gmail.com" class="contact-card-link mail">
+                    <i class="far fa-envelope"></i>
+                    <span>البريد الإلكتروني</span>
+                </a>
+                <a href="tel:01112050354" class="contact-card-link phone">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>إتصل بنا</span>
+                </a>
+            </div>
+        </section>
     </main>
 
     <div id="cart-floating-btn" class="cart-fab">
@@ -58,22 +112,15 @@
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h2 style="color:var(--gold); text-align:center;">🛒 سلة بيت الآغا</h2>
-            
-            <div id="cart-items-list">
-                </div>
-            
+            <div id="cart-items-list"></div>
             <hr style="border:0.5px solid #444; margin:15px 0;">
-            
             <div id="order-form" class="order-form">
                 <input type="text" id="cust-name" placeholder="الاسم بالكامل 👤" required>
                 <input type="tel" id="cust-phone" placeholder="رقم الواتساب 📱" required>
-                
                 <button id="get-loc-btn" type="button" style="background:#444; color:white; border:1px solid var(--gold); width:100%; padding:12px; border-radius:8px; margin-bottom:10px; font-family:'Cairo'; cursor:pointer;">
                     📍 تحديد موقعي الحالي تلقائياً
                 </button>
-                
                 <textarea id="cust-location" placeholder="🏠 (المحافظة / الحي / الشارع / رقم المنزل / الدور / الشقة / علامة مميزة)"></textarea>
-                
                 <button id="submit-order-btn" class="submit-btn">تأكيد الطلب عبر واتساب ✅</button>
             </div>
         </div>
