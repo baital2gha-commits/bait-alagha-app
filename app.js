@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     renderTabs();
     renderProducts(allProducts);
+    setupMainTabs(); // تفعيل التنقل بين الأقسام الرئيسية
 
     const cartBtn = document.getElementById('cart-floating-btn');
     const modal = document.getElementById('cart-modal');
@@ -67,6 +68,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// دالة التحكم في التبويبات الرئيسية (المتجر - بيت الآغا - تواصل معنا)
+function setupMainTabs() {
+    const mainTabButtons = document.querySelectorAll('.main-tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    mainTabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-target');
+
+            // تغيير حالة الأزرار
+            mainTabButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // إظهار القسم المطلوب وإخفاء الباقي
+            tabPanels.forEach(panel => {
+                panel.classList.remove('active');
+                if (panel.id === target) {
+                    panel.classList.add('active');
+                }
+            });
+            
+            // إعادة التمرير للأعلى عند تبديل القسم
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+}
+
 function renderTabs() {
     const tabsContainer = document.getElementById('category-nav');
     if (!tabsContainer) return;
@@ -98,7 +126,6 @@ function filterByCategory(category) {
     }
 }
 
-// --- التعديل المطور لعرض المنتجات بنظام العمودين والزر العائم ---
 function renderProducts(products) {
     const productsContainer = document.getElementById('products-grid');
     if (!productsContainer) return;
@@ -122,7 +149,6 @@ function renderProducts(products) {
 function attachAddEvents() {
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
         button.addEventListener('click', (e) => {
-            // منع أي سلوك افتراضي
             e.preventDefault();
             
             const productId = button.getAttribute('data-id');
@@ -131,7 +157,6 @@ function attachAddEvents() {
             if (product) {
                 addToCart(product);
                 
-                // تأثير بصري سريع عند الإضافة
                 const originalContent = button.innerHTML;
                 button.innerHTML = "✓";
                 button.style.background = "#28a745";
@@ -145,7 +170,6 @@ function attachAddEvents() {
     });
 }
 
-// --- تفعيل الـ Service Worker لتحويل الموقع إلى تطبيق (PWA) ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
