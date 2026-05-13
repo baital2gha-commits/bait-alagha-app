@@ -378,3 +378,122 @@ body {
     border-color: var(--gold);
     font-weight: bold;
 }
+/* --- تنسيق التبويبات الرئيسية (Main Tabs) --- */
+.main-tabs {
+    display: flex;
+    justify-content: space-around;
+    background: #1a1a1a;
+    padding: 10px 0;
+    border-bottom: 2px solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+}
+
+.main-tab-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+}
+
+.main-tab-btn.active {
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.main-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gold);
+    box-shadow: 0 -2px 10px var(--gold);
+}
+
+/* --- التحكم في ظهور الأقسام --- */
+.tab-panel {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+/* --- تنسيق السلايدر (About Slider) --- */
+.about-slider {
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.about-slider::-webkit-scrollbar {
+    display: none;
+}
+
+.slider-track {
+    display: flex;
+}
+
+.slider-track img {
+    width: 100%;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    object-fit: contain;
+    background: #000;
+}
+
+/* --- تنسيق أزرار التواصل (Contact) --- */
+.contact-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.contact-card-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 600;
+    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.contact-card-link i {
+    font-size: 1.5rem;
+    width: 30px;
+    text-align: center;
+}
+
+.contact-card-link:hover {
+    transform: scale(1.02);
+}
+
+/* ألوان أزرار التواصل */
+.contact-card-link.wa { background: linear-gradient(45deg, #25D366, #128C7E); }
+.contact-card-link.fb { background: linear-gradient(45deg, #1877F2, #0C4E9B); }
+.contact-card-link.ig { background: linear-gradient(45deg, #833AB4, #FD1D1D, #FCAF45); }
+.contact-card-link.mail { background: linear-gradient(45deg, #EA4335, #C5221F); }
+.contact-card-link.phone { background: linear-gradient(45deg, #444, #222); border-color: var(--gold); }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
