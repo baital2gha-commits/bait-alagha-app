@@ -177,3 +177,50 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.log('❌ فشل تسجيل Service Worker:', err));
     });
 }
+// --- منطق السلايدر التلقائي لتبويب بيت الآغا ---
+let sliderInterval;
+const sliderTrack = document.querySelector('.slider-track');
+const sliderImages = document.querySelectorAll('.slider-track img');
+let currentIndex = 0;
+
+function startAutoSlider() {
+    // التحرك كل 4 ثوانٍ
+    sliderInterval = setInterval(() => {
+        currentIndex++;
+        
+        // العودة لأول صورة عند الانتهاء
+        if (currentIndex >= sliderImages.length) {
+            currentIndex = 0;
+        }
+        
+        updateSliderPosition();
+    }, 4000);
+}
+
+function updateSliderPosition() {
+    if (sliderTrack && sliderImages.length > 0) {
+        const width = sliderImages[0].clientWidth;
+        sliderTrack.scrollTo({
+            left: width * currentIndex,
+            behavior: 'smooth'
+        });
+    }
+}
+
+function stopAutoSlider() {
+    clearInterval(sliderInterval);
+}
+
+// تشغيل الحركة عند تحميل الصفحة
+startAutoSlider();
+
+// التوقف عند الضغط (أو اللمس في الموبايل)
+if (sliderTrack) {
+    sliderTrack.addEventListener('touchstart', stopAutoSlider);
+    sliderTrack.addEventListener('mousedown', stopAutoSlider);
+    
+    // اختياري: إعادة التشغيل عند رفع اليد/الماوس بعد 5 ثواني من التوقف
+    sliderTrack.addEventListener('touchend', () => {
+        setTimeout(startAutoSlider, 5000);
+    });
+}
