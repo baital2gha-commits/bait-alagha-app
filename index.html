@@ -5,16 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بيت الآغا - Bait Al-Agha</title>
     
-    <!-- إعدادات تحويل الموقع إلى تطبيق (PWA) -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#d4af37">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#111"> <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="Images/Logo.avif">
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- مكتبة الأيقونات للتواصل الاجتماعي -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -41,23 +38,13 @@
         </div>
     </header>
 
-    <!-- شريط التبويبات الرئيسي الجديد -->
-    <nav class="main-tabs">
-        <button class="main-tab-btn active" data-target="store-section">المتجر 🛒</button>
-        <button class="main-tab-btn" data-target="about-section">بيت الآغا ✨</button>
-        <button class="main-tab-btn" data-target="contact-section">تواصل معنا 📞</button>
-    </nav>
-
-    <main id="main-content">
-        <!-- قسم المتجر -->
-        <section id="store-section" class="tab-panel active">
+    <main id="main-content" style="padding-bottom: 80px;"> <section id="store-section" class="tab-panel active">
             <nav id="category-nav" class="tabs-container"></nav>
             <div id="products-grid" class="products-grid">
                 <div class="loader">جاري تحميل تشكيلة بيت الآغا...</div>
             </div>
         </section>
 
-        <!-- قسم عن بيت الآغا (Slider) -->
         <section id="about-section" class="tab-panel">
             <div class="about-slider">
                 <div class="slider-track">
@@ -74,7 +61,6 @@
             </div>
         </section>
 
-        <!-- قسم تواصل معنا -->
         <section id="contact-section" class="tab-panel">
             <div class="contact-container">
                 <a href="https://wa.me/201112050354" class="contact-card-link wa">
@@ -100,6 +86,21 @@
             </div>
         </section>
     </main>
+
+    <nav class="main-tabs bottom-nav">
+        <button class="main-tab-btn active" data-target="store-section">
+            <i class="fas fa-store"></i>
+            <span>المتجر</span>
+        </button>
+        <button class="main-tab-btn" data-target="about-section">
+            <i class="fas fa-gem"></i>
+            <span>بيت الآغا</span>
+        </button>
+        <button class="main-tab-btn" data-target="contact-section">
+            <i class="fas fa-headset"></i>
+            <span>تواصل معنا</span>
+        </button>
+    </nav>
 
     <div id="cart-floating-btn" class="cart-fab">
         <div class="cart-icon-wrapper">
