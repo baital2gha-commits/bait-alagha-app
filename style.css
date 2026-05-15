@@ -216,8 +216,8 @@ body {
 /* زر السلة العائم */
 .cart-fab {
     position: fixed;
-    bottom: 25px;
-    left: 25px;
+    bottom: 100px;
+    left: 100px;
     background: var(--gold);
     width: 60px;
     height: 60px;
