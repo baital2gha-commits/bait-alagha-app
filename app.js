@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// --- دالة التحكم في التبويبات والسلايدر المتوافق مع العربية ---
+// --- دالة التحكم في التبويبات والسلايدر المحدثة ---
 function setupMainTabs() {
     const mainTabButtons = document.querySelectorAll('.main-tab-btn');
     const tabPanels = document.querySelectorAll('.tab-panel');
@@ -87,9 +87,10 @@ function setupMainTabs() {
                 if (panel.id === target) panel.classList.add('active');
             });
 
-            // تحكم ذكي: يبدأ السلايدر فقط عند فتح تبويب "بيت الآغا"
+            // بدء السلايدر فقط عند فتح تبويب بيت الآغا
             if (target === 'about-section') {
-                startAutoSlider();
+                // تأخير بسيط للتأكد من أن القسم أصبح مرئياً قبل الحساب
+                setTimeout(startAutoSlider, 100);
             } else {
                 stopAutoSlider();
             }
@@ -98,34 +99,32 @@ function setupMainTabs() {
         });
     });
 
-    // التوقف عند الضغط أو اللمس
     if (sliderTrack) {
-        sliderTrack.addEventListener('touchstart', stopAutoSlider);
+        // إيقاف عند اللمس
+        sliderTrack.addEventListener('touchstart', () => {
+            stopAutoSlider();
+        }, {passive: true});
+
         sliderTrack.addEventListener('mousedown', stopAutoSlider);
         
-        // إعادة التشغيل بعد 5 ثوانٍ من ترك الشاشة (فقط إذا كان التبويب لا يزال مفتوحاً)
+        // إعادة التشغيل بعد التوقف بـ 5 ثواني
         sliderTrack.addEventListener('touchend', () => {
             setTimeout(() => {
                 const aboutActive = document.getElementById('about-section').classList.contains('active');
                 if (aboutActive) startAutoSlider();
             }, 5000);
-        });
+        }, {passive: true});
     }
 }
 
+// تعديل باقي الدوال كما هي...
 function renderTabs() {
     const tabsContainer = document.getElementById('category-nav');
     if (!tabsContainer) return;
-    
     const categories = ['الكل', ...new Set(allProducts.map(p => p.Category))];
-
     tabsContainer.innerHTML = categories.map(cat => `
-        <button class="tab-item ${cat === currentCategory ? 'active' : ''}" 
-                data-category="${cat}">
-            ${cat}
-        </button>
+        <button class="tab-item ${cat === currentCategory ? 'active' : ''}" data-category="${cat}">${cat}</button>
     `).join('');
-
     document.querySelectorAll('.tab-item').forEach(button => {
         button.addEventListener('click', () => {
             document.querySelectorAll('.tab-item').forEach(b => b.classList.remove('active'));
@@ -136,18 +135,13 @@ function renderTabs() {
 }
 
 function filterByCategory(category) {
-    if (category === 'الكل') {
-        renderProducts(allProducts);
-    } else {
-        const filtered = allProducts.filter(p => p.Category === category);
-        renderProducts(filtered);
-    }
+    if (category === 'الكل') renderProducts(allProducts);
+    else renderProducts(allProducts.filter(p => p.Category === category));
 }
 
 function renderProducts(products) {
     const productsContainer = document.getElementById('products-grid');
     if (!productsContainer) return;
-    
     productsContainer.innerHTML = products.map(p => `
         <div class="product-card">
             <img src="${p.ImageURL || 'https://via.placeholder.com/150'}" alt="${p.Name}">
@@ -155,12 +149,9 @@ function renderProducts(products) {
                 <h3 class="product-name">${p.Name}</h3>
                 <span class="product-price">${p.Price} ج.م</span>
             </div>
-            <button class="add-to-cart-btn" data-id="${p.ID}" aria-label="إضافة للسلة">
-                🛒
-            </button>
+            <button class="add-to-cart-btn" data-id="${p.ID}" aria-label="إضافة للسلة">🛒</button>
         </div>
     `).join('');
-
     attachAddEvents();
 }
 
@@ -168,8 +159,7 @@ function attachAddEvents() {
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            const productId = button.getAttribute('data-id');
-            const product = allProducts.find(p => p.ID == productId);
+            const product = allProducts.find(p => p.ID == button.getAttribute('data-id'));
             if (product) {
                 addToCart(product);
                 const originalContent = button.innerHTML;
@@ -186,18 +176,16 @@ function attachAddEvents() {
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('✅ Service Worker تم تسجيله بنجاح'))
-            .catch(err => console.log('❌ فشل تسجيل Service Worker:', err));
+        navigator.serviceWorker.register('/sw.js');
     });
 }
 
-// --- منطق السلايدر التلقائي المطور (RTL) ---
+// --- منطق السلايدر التلقائي النهائي (متوافق مع كل المتصفحات RTL) ---
 let sliderInterval;
 let currentIndex = 0;
 
 function startAutoSlider() {
-    stopAutoSlider(); // مسح أي عداد قديم
+    stopAutoSlider();
     const sliderTrack = document.querySelector('.slider-track');
     const images = document.querySelectorAll('.slider-track img');
     
@@ -209,14 +197,15 @@ function startAutoSlider() {
             currentIndex = 0;
         }
         
-        const width = sliderTrack.clientWidth;
+        // حساب العرض الفعلي للصورة الواحدة
+        const imageWidth = images[0].offsetWidth;
         
-        // في وضع العربي (RTL)، التمرير لليسار (للصورة التالية) يتطلب قيمة سالبة في معظم المتصفحات
+        // استخدام scrollLeft بقيم موجبة (أغلب المتصفحات الآن تدعم التمرير الموجب في الـ RTL)
         sliderTrack.scrollTo({
-            left: -(width * currentIndex),
+            left: imageWidth * currentIndex,
             behavior: 'smooth'
         });
-    }, 3000); // التحرك كل 3 ثوانٍ
+    }, 3000);
 }
 
 function stopAutoSlider() {
