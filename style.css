@@ -431,30 +431,25 @@ body {
 /* --- تنسيق السلايدر المطور (About Slider) --- */
 .about-slider {
     width: 100%;
-    overflow: hidden; /* تم التغيير لمنع التمرير اليدوي العشوائي أثناء الحركة التلقائية */
+    overflow: hidden; /* ضروري جداً لمنع ظهور الصور خارج الإطار */
     position: relative;
     background: #000;
 }
 
 .slider-track {
     display: flex;
-    /* التمرير السلس سيعتمد الآن على دالة scrollTo في الجافا سكريبت أو التمرير اليدوي */
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    scrollbar-width: none; /* لإخفاء الشريط في فيرفوكس */
-}
-
-.slider-track::-webkit-scrollbar {
-    display: none; /* لإخفاء الشريط في كروم وسفاري */
+    width: 100%;
+    /* تم إلغاء السكرول اليدوي لضمان ثبات الحركة التلقائية */
+    transition: transform 0.8s ease-in-out; /* سرعة ونعومة الانتقال */
 }
 
 .slider-track img {
     width: 100%;
     flex-shrink: 0;
-    scroll-snap-align: start;
     object-fit: contain;
     display: block;
+    /* نلغي السناب لأنه يعتمد على السكرول القديم */
+    scroll-snap-align: none; 
 }
 
 /* --- تنسيق أزرار التواصل (Contact) --- */
