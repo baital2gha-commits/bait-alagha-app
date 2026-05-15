@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// --- دالة التحكم في التبويبات والسلايدر المحدثة ---
+// --- دالة التحكم في التبويبات والسلايدر (الحل النهائي والمستقر) ---
 function setupMainTabs() {
     const mainTabButtons = document.querySelectorAll('.main-tab-btn');
     const tabPanels = document.querySelectorAll('.tab-panel');
@@ -87,10 +87,11 @@ function setupMainTabs() {
                 if (panel.id === target) panel.classList.add('active');
             });
 
-            // بدء السلايدر فقط عند فتح تبويب بيت الآغا
             if (target === 'about-section') {
-                // تأخير بسيط للتأكد من أن القسم أصبح مرئياً قبل الحساب
-                setTimeout(startAutoSlider, 100);
+                // تصفير الموقع عند الدخول للقسم لضمان بداية صحيحة
+                currentIndex = 0;
+                if (sliderTrack) sliderTrack.style.transform = `translateX(0%)`;
+                setTimeout(startAutoSlider, 300);
             } else {
                 stopAutoSlider();
             }
@@ -100,11 +101,8 @@ function setupMainTabs() {
     });
 
     if (sliderTrack) {
-        // إيقاف عند اللمس
-        sliderTrack.addEventListener('touchstart', () => {
-            stopAutoSlider();
-        }, {passive: true});
-
+        // إيقاف عند اللمس أو الضغط
+        sliderTrack.addEventListener('touchstart', stopAutoSlider, {passive: true});
         sliderTrack.addEventListener('mousedown', stopAutoSlider);
         
         // إعادة التشغيل بعد التوقف بـ 5 ثواني
@@ -117,7 +115,6 @@ function setupMainTabs() {
     }
 }
 
-// تعديل باقي الدوال كما هي...
 function renderTabs() {
     const tabsContainer = document.getElementById('category-nav');
     if (!tabsContainer) return;
@@ -180,7 +177,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// --- منطق السلايدر التلقائي النهائي (متوافق مع كل المتصفحات RTL) ---
+// --- منطق السلايدر التلقائي (يعتمد على التحويل الفيزيائي لضمان الثبات في RTL) ---
 let sliderInterval;
 let currentIndex = 0;
 
@@ -197,15 +194,11 @@ function startAutoSlider() {
             currentIndex = 0;
         }
         
-        // حساب العرض الفعلي للصورة الواحدة
-        const imageWidth = images[0].offsetWidth;
-        
-        // استخدام scrollLeft بقيم موجبة (أغلب المتصفحات الآن تدعم التمرير الموجب في الـ RTL)
-        sliderTrack.scrollTo({
-            left: imageWidth * currentIndex,
-            behavior: 'smooth'
-        });
-    }, 3000);
+        // في وضع العربي (RTL) نستخدم قيمة موجبة لتحريك الـ Track لليسار وإظهار الصورة التالية
+        const movePercentage = currentIndex * 100;
+        sliderTrack.style.transition = "transform 0.8s ease-in-out";
+        sliderTrack.style.transform = `translateX(${movePercentage}%)`;
+    }, 3000); // كل 3 ثواني
 }
 
 function stopAutoSlider() {
