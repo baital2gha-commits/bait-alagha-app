@@ -213,11 +213,11 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-/* زر السلة العائم */
+/* زر السلة العائم المحدث */
 .cart-fab {
     position: fixed;
-    bottom: 100px;
-    left: 100px;
+    bottom: 100px; /* يحافظ على مكانه فوق شريط التبويبات السفلي */
+    left: 20px;    /* تم تقليل القيمة من 100 إلى 20 لتحريكه جهة اليسار (حافة الشاشة) */
     background: var(--gold);
     width: 60px;
     height: 60px;
@@ -228,27 +228,7 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     z-index: 2000;
     cursor: pointer;
-}
-
-.cart-icon-wrapper {
-    position: relative;
-    font-size: 1.5rem;
-}
-
-.cart-badge {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    background: #e74c3c;
-    color: white;
-    font-size: 0.75rem;
-    min-width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--black);
+    transition: 0.3s; /* إضافة نعومة عند التفاعل */
 }
 
 /* تنسيق النافذة المنبثقة (Modal) */
