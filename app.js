@@ -69,31 +69,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// دالة التحكم في التبويبات الرئيسية (المتجر - بيت الآغا - تواصل معنا)
+// --- دالة التحكم في التبويبات والسلايدر المتوافق مع العربية ---
 function setupMainTabs() {
     const mainTabButtons = document.querySelectorAll('.main-tab-btn');
     const tabPanels = document.querySelectorAll('.tab-panel');
+    const sliderTrack = document.querySelector('.slider-track');
 
     mainTabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const target = btn.getAttribute('data-target');
 
-            // تغيير حالة الأزرار
             mainTabButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // إظهار القسم المطلوب وإخفاء الباقي
             tabPanels.forEach(panel => {
                 panel.classList.remove('active');
-                if (panel.id === target) {
-                    panel.classList.add('active');
-                }
+                if (panel.id === target) panel.classList.add('active');
             });
+
+            // تحكم ذكي: يبدأ السلايدر فقط عند فتح تبويب "بيت الآغا"
+            if (target === 'about-section') {
+                startAutoSlider();
+            } else {
+                stopAutoSlider();
+            }
             
-            // إعادة التمرير للأعلى عند تبديل القسم
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
+
+    // التوقف عند الضغط أو اللمس
+    if (sliderTrack) {
+        sliderTrack.addEventListener('touchstart', stopAutoSlider);
+        sliderTrack.addEventListener('mousedown', stopAutoSlider);
+        
+        // إعادة التشغيل بعد 5 ثوانٍ من ترك الشاشة (فقط إذا كان التبويب لا يزال مفتوحاً)
+        sliderTrack.addEventListener('touchend', () => {
+            setTimeout(() => {
+                const aboutActive = document.getElementById('about-section').classList.contains('active');
+                if (aboutActive) startAutoSlider();
+            }, 5000);
+        });
+    }
 }
 
 function renderTabs() {
@@ -151,17 +168,13 @@ function attachAddEvents() {
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            
             const productId = button.getAttribute('data-id');
             const product = allProducts.find(p => p.ID == productId);
-            
             if (product) {
                 addToCart(product);
-                
                 const originalContent = button.innerHTML;
                 button.innerHTML = "✓";
                 button.style.background = "#28a745";
-                
                 setTimeout(() => {
                     button.innerHTML = originalContent;
                     button.style.background = "var(--gold)";
@@ -178,50 +191,34 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.log('❌ فشل تسجيل Service Worker:', err));
     });
 }
-// --- منطق السلايدر التلقائي لتبويب بيت الآغا ---
+
+// --- منطق السلايدر التلقائي المطور (RTL) ---
 let sliderInterval;
-const sliderTrack = document.querySelector('.slider-track');
-const sliderImages = document.querySelectorAll('.slider-track img');
 let currentIndex = 0;
 
 function startAutoSlider() {
-    // التحرك كل 4 ثوانٍ
+    stopAutoSlider(); // مسح أي عداد قديم
+    const sliderTrack = document.querySelector('.slider-track');
+    const images = document.querySelectorAll('.slider-track img');
+    
+    if (!sliderTrack || images.length === 0) return;
+
     sliderInterval = setInterval(() => {
         currentIndex++;
-        
-        // العودة لأول صورة عند الانتهاء
-        if (currentIndex >= sliderImages.length) {
+        if (currentIndex >= images.length) {
             currentIndex = 0;
         }
         
-        updateSliderPosition();
-    }, 4000);
-}
-
-function updateSliderPosition() {
-    if (sliderTrack && sliderImages.length > 0) {
-        const width = sliderImages[0].clientWidth;
+        const width = sliderTrack.clientWidth;
+        
+        // في وضع العربي (RTL)، التمرير لليسار (للصورة التالية) يتطلب قيمة سالبة في معظم المتصفحات
         sliderTrack.scrollTo({
-            left: width * currentIndex,
+            left: -(width * currentIndex),
             behavior: 'smooth'
         });
-    }
+    }, 3000); // التحرك كل 3 ثوانٍ
 }
 
 function stopAutoSlider() {
-    clearInterval(sliderInterval);
-}
-
-// تشغيل الحركة عند تحميل الصفحة
-startAutoSlider();
-
-// التوقف عند الضغط (أو اللمس في الموبايل)
-if (sliderTrack) {
-    sliderTrack.addEventListener('touchstart', stopAutoSlider);
-    sliderTrack.addEventListener('mousedown', stopAutoSlider);
-    
-    // اختياري: إعادة التشغيل عند رفع اليد/الماوس بعد 5 ثواني من التوقف
-    sliderTrack.addEventListener('touchend', () => {
-        setTimeout(startAutoSlider, 5000);
-    });
+    if (sliderInterval) clearInterval(sliderInterval);
 }
